@@ -1,0 +1,206 @@
+---
+title: "演算子について"
+author: "@y__mattu"
+date: "2019/3/2 Tokyo.R #76"
+output:
+  revealjs::revealjs_presentation:
+    include:
+      before_body: "slide-header.html"
+    mathjax: NULL
+    transition: convex
+    css: for_revealjs.css
+    theme: sky
+    highlight: kate
+    center: true
+    self_contained: false
+    reveal_plugins: ["chalkboard"]
+    reveal_options:
+      slideNumber: true
+      chalkboard:
+        theme: whiteboard
+    # incremental: false
+pandoc_args: [
+  '--from', 'markdown+autolink_bare_uris+tex_math_single_backslash-implicit_figures'
+]
+---
+
+```{r eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, comment=""}
+knitr::opts_chunk$set(echo = TRUE,
+                      eval = TRUE,
+                      warning = FALSE,
+                      message = FALSE,
+                      comment = "",
+                      fig.height = 10,
+                      fig.width = 10,
+                      out.height = 300,
+                      out.width = 300)
+options(dplyr.print_max = 1e9)
+```
+# はじめに
+
+## 誰？
+
+<div class="column1">
+- 松村優哉
+- <u>Twitter</u>: **y\_\_mattu**
+- <u>GitHub</u>: **ymattu**
+- 大学院生
+- 計量経済学、ベイズ統計、因果推論、マーケティング
+- 言語: R, Python, SAS
+- https://ymattu.github.io/
+- http://y-mattu.hatenablog.com/
+- Tokyo.R 運営
+</div>
+
+<div class="column2">
+![icon](./img/twitter_icon.jpg)
+</div>
+
+## 著書 {#bo}
+
+#### **R ユーザのための RStudio[実践]入門 <br> − tidyverse によるモダンな分析フローの世界−**
+<div class="column1">
+![rstudiobook](./img/rstudiobook.jpg)
+</div>
+
+<div class="column2">
+- 通称: 「**宇宙本**」
+1. RStudio 入門(@y\_\_mattu)
+2. スクレイピングによるデータ取得(@y\_\_mattu)
+3. dplyr を中心としたデータハンドリング(@yutannihilation)
+4. ggplot2 による可視化(@kyn02666)
+5. R Markdown によるレポーティング(@kazutan)
+</div>
+
+## 今日のお話 {#todys_theme}
+- 導入
+    - 総称関数
+- 演算子の挙動
+    - 関数の実行環境
+    - 演算子の中身
+    - 演算子を定義
+- まとめ
+
+# 本日の目標 {#todays_goal}
+## これを理解する {#understand_this}
+
+```{r, todays_goal}
+result <- 1 + 2
+print(result)
+``` 
+
+とくに `result <- 1 + 1` の部分
+
+## 今日いちばん大切なこと {#most_important}
+「Rのすべての関数はオブジェクトであり、すべてのオブジェクトは関数である。」 
+
+↓
+
+「**R上での全ての挙動は関数の実行である**。」
+
+# 余談 {#bytheway}
+## ここでは何が起こっているのか {#what_happened_here}
+```{r}
+print(result)
+```
+
+- `print.default()` が実行されている
+- `print()` は **総称関数** と呼ばれる関数で、引数の中身(のクラス)によって特定の関数が呼び出される
+- 「メソッドがディスパッチされる」という言い回しをします
+- 他には `head()`, `plot()`, `summary()` など
+
+## 総称関数1 {#usemethod1}
+- Rでは、関数をカッコ無しでREPLに入れるとその中身が表示される
+- なぜならば、全ての関数はオブジェクトだから
+- 総称関数は、 `UseMethod("")` という表示が出てくる
+```{r, look_print}
+print
+```
+
+## 総称関数2 {#usemethod2}
+メソッド一覧は `methods()` 関数で見る
+
+```{r, print_methods}
+methods("print")
+```
+
+
+## 総称関数3 {#usemethod3}
+```{r}
+print.default
+```
+
+# ようやく演算子のお話 {#operator}
+## 冒頭の格言を思い出す {#remember}
+「Rのすべての関数はオブジェクトであり、すべてのオブジェクトは関数である。」
+
+## つまり {#imean}
+演算子も関数→`関数名()` という書き方ができるはず！
+
+```{r, lisplike}
+`+`(1, 2) # 1 + 1 と同じ
+
+`<-`(a, 1 + 2) # a <- 1 + 2 と同じ
+print(a)
+```
+
+※これはあくまで「演算子も関数であるというのを分かりやすくしているだけなので、Rでは普通こういう書き方はしません。(Lispっぽい書き方)」
+
+# ここからが本題
+## ここでは何が起こっているのか {#what_happened_here2}
+```{r}
+1 + 1
+```
+
+言い換えると、「`` `+`() `` 関数が実行されるときに何が起こっているのか」
+
+## これを知るために理解してきたいこと {#weneed}
+- 実行環境
+- C関数の探索
+
+## pryr パッケージ
+Rの内部や挙動を知るのに便利なパッケージ
+
+```{r, pryr}
+# install.packages("pryr")
+library(pryr)
+```
+
+
+# 実行環境
+## 関数の構成要素
+- body: 関数内部のRコード
+- formals: 引数の集まり
+- environment: 環境
+
+# C関数の探索
+## `` `+`() `` 関数の中身を見ると... {#inseide_plus}
+```{r, inside_plus}
+`+`
+```
+
+## `.Primitive()`
+
+
+# まとめ {#matome}
+## 最初の目標 {#goal}
+すごく単純なコードでも、また違って見えて面白いですね
+```{r, todays_goal2}
+result <- 1 + 2
+print(result)
+``` 
+
+## 演算子 {#operator_matome}
+- 普段何気なく使ってる演算子でもちゃんと理解しようとするとけっこう大変
+- でも(ある程度)分かっておくとパッケージ開発の時とか超便利
+
+## 本資料について {#revealjs}
+- revealjs パッケージで作りました。
+- 以下の URL で公開しています。 <br> https://ymattu.github.io/TokyoR76/slide.html#/
+
+## 参考文献
+- http://rtokei.tech/r/r%E3%81%AE%E3%81%93%E3%81%A8%E3%82%92%E5%AD%A6%E3%81%B6010s3%E3%82%AF%E3%83%A9%E3%82%B9/
+- https://notchained.hatenablog.com/entry/2018/11/11/162550
+- http://mukkujohn.hatenablog.com/entry/2016/07/13/220822
+
+## Enjoy! {#enjoy}

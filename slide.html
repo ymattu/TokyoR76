@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="@y__mattu" />
+  <title>演算子について</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="slide_files/reveal.js-3.3.0.1/css/reveal.css"/>
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; background-color: #ffffff; color: #1f1c1b; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; background-color: #ffffff; color: #a0a0a0; border-right: 1px solid #a0a0a0; }
+td.sourceCode { padding-left: 5px; }
+pre, code { color: #1f1c1b; background-color: #ffffff; }
+code > span.kw { color: #1f1c1b; font-weight: bold; } /* Keyword */
+code > span.dt { color: #0057ae; } /* DataType */
+code > span.dv { color: #b08000; } /* DecVal */
+code > span.bn { color: #b08000; } /* BaseN */
+code > span.fl { color: #b08000; } /* Float */
+code > span.cn { color: #aa5500; } /* Constant */
+code > span.ch { color: #924c9d; } /* Char */
+code > span.sc { color: #3daee9; } /* SpecialChar */
+code > span.st { color: #bf0303; } /* String */
+code > span.vs { color: #bf0303; } /* VerbatimString */
+code > span.ss { color: #ff5500; } /* SpecialString */
+code > span.im { color: #ff5500; } /* Import */
+code > span.co { color: #898887; } /* Comment */
+code > span.do { color: #607880; } /* Documentation */
+code > span.an { color: #ca60ca; } /* Annotation */
+code > span.cv { color: #0095ff; } /* CommentVar */
+code > span.ot { color: #006e28; } /* Other */
+code > span.fu { color: #644a9b; } /* Function */
+code > span.va { color: #0057ae; } /* Variable */
+code > span.cf { color: #1f1c1b; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #1f1c1b; } /* Operator */
+code > span.bu { color: #644a9b; font-weight: bold; } /* BuiltIn */
+code > span.ex { color: #0095ff; font-weight: bold; } /* Extension */
+code > span.pp { color: #006e28; } /* Preprocessor */
+code > span.at { color: #0057ae; } /* Attribute */
+code > span.re { color: #0057ae; } /* RegionMarker */
+code > span.in { color: #b08000; } /* Information */
+code > span.wa { color: #bf0303; } /* Warning */
+code > span.al { color: #bf0303; font-weight: bold; } /* Alert */
+code > span.er { color: #bf0303; text-decoration: underline; } /* Error */
+code > span. { color: #1f1c1b; } /* Normal */
+</style>
+
+<link rel="stylesheet" href="slide_files/reveal.js-3.3.0.1/css/theme/sky.css" id="theme">
+
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+    <link rel="stylesheet" href="for_revealjs.css"/>
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
+
+    <link href="slide_files/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
+    <script src="slide_files/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
+    <script src="slide_files/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
+</head>
+<body>
+<div id="slide-footer">
+  <p>GitHub → <a href="https://bit.ly/2V4mtwG">https://bit.ly/2V4mtwG</a></p>
+</div>
+  <div class="reveal">
+    <div class="slides">
+
+<section>
+    <h1 class="title">演算子について</h1>
+    <h2 class="author"><span class="citation" data-cites="y__mattu">@y__mattu</span></h2>
+    <h3 class="date">2019/3/2 Tokyo.R #76</h3>
+</section>
+
+<section><section class="titleslide slide level1"><h1>はじめに</h1></section><section class="slide level2">
+<h2>誰？</h2>
+<div class="column1">
+<ul>
+<li>松村優哉</li>
+<li><u>Twitter</u>: <strong>y__mattu</strong></li>
+<li><u>GitHub</u>: <strong>ymattu</strong></li>
+<li>大学院生</li>
+<li>計量経済学、ベイズ統計、因果推論、マーケティング</li>
+<li>言語: R, Python, SAS</li>
+<li><a href="https://ymattu.github.io/" class="uri">https://ymattu.github.io/</a></li>
+<li><a href="http://y-mattu.hatenablog.com/" class="uri">http://y-mattu.hatenablog.com/</a></li>
+<li>Tokyo.R 運営</li>
+</ul>
+</div>
+<div class="column2">
+<p><img src="img/twitter_icon.jpg" alt="icon" /></p>
+</div>
+</section><section id="bo" class="slide level2">
+<h2>著書</h2>
+<h4 id="r--rstudio-tidyverse-"><strong>R ユーザのための RStudio[実践]入門 <br> − tidyverse によるモダンな分析フローの世界−</strong></h4>
+<div class="column1">
+<p><img src="img/rstudiobook.jpg" alt="rstudiobook" /></p>
+</div>
+<div class="column2">
+<ul>
+<li>通称: 「<strong>宇宙本</strong>」</li>
+</ul>
+<ol type="1">
+<li>RStudio 入門(<span class="citation" data-cites="y">@y</span>__mattu)</li>
+<li>スクレイピングによるデータ取得(<span class="citation" data-cites="y">@y</span>__mattu)</li>
+<li>dplyr を中心としたデータハンドリング(<span class="citation" data-cites="yutannihilation">@yutannihilation</span>)</li>
+<li>ggplot2 による可視化(<span class="citation" data-cites="kyn02666">@kyn02666</span>)</li>
+<li>R Markdown によるレポーティング(<span class="citation" data-cites="kazutan">@kazutan</span>)</li>
+</ol>
+</div>
+</section><section id="todys_theme" class="slide level2">
+<h2>今日のお話</h2>
+<ul>
+<li>導入
+<ul>
+<li>総称関数</li>
+</ul></li>
+<li>演算子の挙動
+<ul>
+<li>関数の実行環境</li>
+<li>演算子の中身</li>
+<li>演算子を定義</li>
+</ul></li>
+<li>まとめ</li>
+</ul>
+</section></section>
+<section><section id="todays_goal" class="titleslide slide level1"><h1>本日の目標</h1></section><section id="understand_this" class="slide level2">
+<h2>これを理解する</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">result &lt;-<span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="dv">2</span>
+<span class="kw">print</span>(result)</code></pre></div>
+<pre><code>[1] 3</code></pre>
+<p>とくに <code>result &lt;- 1 + 1</code> の部分</p>
+</section><section id="most_important" class="slide level2">
+<h2>今日いちばん大切なこと</h2>
+<p>「Rのすべての関数はオブジェクトであり、すべてのオブジェクトは関数である。」</p>
+<p>↓</p>
+<p>「<strong>R上での全ての挙動は関数の実行である</strong>。」</p>
+</section></section>
+<section><section id="bytheway" class="titleslide slide level1"><h1>余談</h1></section><section id="what_happened_here" class="slide level2">
+<h2>ここでは何が起こっているのか</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(result)</code></pre></div>
+<pre><code>[1] 3</code></pre>
+<ul>
+<li><code>print.default()</code> が実行されている</li>
+<li><code>print()</code> は <strong>総称関数</strong> と呼ばれる関数で、引数の中身(のクラス)によって特定の関数が呼び出される</li>
+<li>「メソッドがディスパッチされる」という言い回しをします</li>
+<li>他には <code>head()</code>, <code>plot()</code>, <code>summary()</code> など</li>
+</ul>
+</section><section id="usemethod1" class="slide level2">
+<h2>総称関数1</h2>
+<ul>
+<li>Rでは、関数をカッコ無しでREPLに入れるとその中身が表示される</li>
+<li>なぜならば、全ての関数はオブジェクトだから</li>
+<li>総称関数は、 <code>UseMethod(&quot;&quot;)</code> という表示が出てくる</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">print</code></pre></div>
+<pre><code>function (x, ...) 
+UseMethod(&quot;print&quot;)
+&lt;bytecode: 0x7fd62a11fe98&gt;
+&lt;environment: namespace:base&gt;</code></pre>
+</section><section id="usemethod2" class="slide level2">
+<h2>総称関数2</h2>
+<p>メソッド一覧は <code>methods()</code> 関数で見る</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">methods</span>(<span class="st">&quot;print&quot;</span>)</code></pre></div>
+<pre><code>  [1] print.AES*                                        
+  [2] print.Arima*                                      
+  [3] print.AsIs                                        
+  [4] print.Bibtex*                                     
+  [5] print.CRAN_package_reverse_dependencies_and_views*
+  [6] print.DLLInfo                                     
+  [7] print.DLLInfoList                                 
+  [8] print.DLLRegisteredRoutines                       
+  [9] print.Date                                        
+ [10] print.Dlist                                       
+ [11] print.HoltWinters*                                
+ [12] print.LaTeX*                                      
+ [13] print.Latex*                                      
+ [14] print.MethodsFunction*                            
+ [15] print.NativeRoutineList                           
+ [16] print.PDF_Array*                                  
+ [17] print.PDF_Dictionary*                             
+ [18] print.PDF_Indirect_Reference*                     
+ [19] print.PDF_Keyword*                                
+ [20] print.PDF_Name*                                   
+ [21] print.PDF_Stream*                                 
+ [22] print.PDF_String*                                 
+ [23] print.POSIXct                                     
+ [24] print.POSIXlt                                     
+ [25] print.RGBcolorConverter*                          
+ [26] print.Rcpp_stack_trace*                           
+ [27] print.Rd*                                         
+ [28] print.StructTS*                                   
+ [29] print.TukeyHSD*                                   
+ [30] print.acf*                                        
+ [31] print.anova*                                      
+ [32] print.aov*                                        
+ [33] print.aovlist*                                    
+ [34] print.ar*                                         
+ [35] print.arima0*                                     
+ [36] print.aspell*                                     
+ [37] print.aspell_inspect_context*                     
+ [38] print.bibentry*                                   
+ [39] print.browseVignettes*                            
+ [40] print.by                                          
+ [41] print.bytes*                                      
+ [42] print.changedFiles*                               
+ [43] print.checkDocFiles*                              
+ [44] print.checkDocStyle*                              
+ [45] print.checkFF*                                    
+ [46] print.checkRd*                                    
+ [47] print.checkReplaceFuns*                           
+ [48] print.checkS3methods*                             
+ [49] print.checkTnF*                                   
+ [50] print.checkVignettes*                             
+ [51] print.check_Rd_contents*                          
+ [52] print.check_Rd_line_widths*                       
+ [53] print.check_Rd_metadata*                          
+ [54] print.check_Rd_xrefs*                             
+ [55] print.check_RegSym_calls*                         
+ [56] print.check_T_and_F*                              
+ [57] print.check_code_usage_in_package*                
+ [58] print.check_compiled_code*                        
+ [59] print.check_demo_index*                           
+ [60] print.check_depdef*                               
+ [61] print.check_details*                              
+ [62] print.check_details_changes*                      
+ [63] print.check_doi_db*                               
+ [64] print.check_dotInternal*                          
+ [65] print.check_make_vars*                            
+ [66] print.check_nonAPI_calls*                         
+ [67] print.check_package_CRAN_incoming*                
+ [68] print.check_package_code_assign_to_globalenv*     
+ [69] print.check_package_code_attach*                  
+ [70] print.check_package_code_data_into_globalenv*     
+ [71] print.check_package_code_startup_functions*       
+ [72] print.check_package_code_syntax*                  
+ [73] print.check_package_code_unload_functions*        
+ [74] print.check_package_compact_datasets*             
+ [75] print.check_package_datasets*                     
+ [76] print.check_package_depends*                      
+ [77] print.check_package_description*                  
+ [78] print.check_package_description_encoding*         
+ [79] print.check_package_license*                      
+ [80] print.check_packages_in_dir*                      
+ [81] print.check_packages_used*                        
+ [82] print.check_po_files*                             
+ [83] print.check_pragmas*                              
+ [84] print.check_so_symbols*                           
+ [85] print.check_url_db*                               
+ [86] print.check_vignette_index*                       
+ [87] print.citation*                                   
+ [88] print.codoc*                                      
+ [89] print.codocClasses*                               
+ [90] print.codocData*                                  
+ [91] print.colorConverter*                             
+ [92] print.compactPDF*                                 
+ [93] print.condition                                   
+ [94] print.connection                                  
+ [95] print.data.frame                                  
+ [96] print.default                                     
+ [97] print.dendrogram*                                 
+ [98] print.density*                                    
+ [99] print.difftime                                    
+[100] print.dist*                                       
+[101] print.dummy_coef*                                 
+[102] print.dummy_coef_list*                            
+[103] print.ecdf*                                       
+[104] print.eigen                                       
+[105] print.factanal*                                   
+[106] print.factor                                      
+[107] print.family*                                     
+[108] print.fileSnapshot*                               
+[109] print.findLineNumResult*                          
+[110] print.formula*                                    
+[111] print.fseq*                                       
+[112] print.ftable*                                     
+[113] print.function                                    
+[114] print.getAnywhere*                                
+[115] print.glm*                                        
+[116] print.hclust*                                     
+[117] print.help_files_with_topic*                      
+[118] print.hexmode                                     
+[119] print.hsearch*                                    
+[120] print.hsearch_db*                                 
+[121] print.htest*                                      
+[122] print.html*                                       
+[123] print.html_dependency*                            
+[124] print.infl*                                       
+[125] print.integrate*                                  
+[126] print.isoreg*                                     
+[127] print.kmeans*                                     
+[128] print.knitr_kable*                                
+[129] print.libraryIQR                                  
+[130] print.listof                                      
+[131] print.lm*                                         
+[132] print.loadings*                                   
+[133] print.loess*                                      
+[134] print.logLik*                                     
+[135] print.ls_str*                                     
+[136] print.medpolish*                                  
+[137] print.mtable*                                     
+[138] print.news_db*                                    
+[139] print.nls*                                        
+[140] print.no                                          
+[141] print.noquote                                     
+[142] print.numeric_version                             
+[143] print.object_size*                                
+[144] print.octmode                                     
+[145] print.packageDescription*                         
+[146] print.packageIQR*                                 
+[147] print.packageInfo                                 
+[148] print.packageStatus*                              
+[149] print.pairwise.htest*                             
+[150] print.pdf_doc*                                    
+[151] print.pdf_fonts*                                  
+[152] print.pdf_info*                                   
+[153] print.person*                                     
+[154] print.power.htest*                                
+[155] print.ppr*                                        
+[156] print.prcomp*                                     
+[157] print.princomp*                                   
+[158] print.proc_time                                   
+[159] print.raster*                                     
+[160] print.recordedplot*                               
+[161] print.restart                                     
+[162] print.rle                                         
+[163] print.roman*                                      
+[164] print.root_criterion*                             
+[165] print.sessionInfo*                                
+[166] print.shiny.tag*                                  
+[167] print.shiny.tag.list*                             
+[168] print.simple.list                                 
+[169] print.smooth.spline*                              
+[170] print.socket*                                     
+[171] print.srcfile                                     
+[172] print.srcref                                      
+[173] print.stepfun*                                    
+[174] print.stl*                                        
+[175] print.subdir_tests*                               
+[176] print.summarize_CRAN_check_status*                
+[177] print.summary.aov*                                
+[178] print.summary.aovlist*                            
+[179] print.summary.ecdf*                               
+[180] print.summary.glm*                                
+[181] print.summary.lm*                                 
+[182] print.summary.loess*                              
+[183] print.summary.manova*                             
+[184] print.summary.nls*                                
+[185] print.summary.packageStatus*                      
+[186] print.summary.ppr*                                
+[187] print.summary.prcomp*                             
+[188] print.summary.princomp*                           
+[189] print.summary.table                               
+[190] print.summary.warnings                            
+[191] print.summaryDefault                              
+[192] print.table                                       
+[193] print.tables_aov*                                 
+[194] print.terms*                                      
+[195] print.ts*                                         
+[196] print.tskernel*                                   
+[197] print.tukeyline*                                  
+[198] print.tukeysmooth*                                
+[199] print.undoc*                                      
+[200] print.vignette*                                   
+[201] print.warnings                                    
+[202] print.xfun_raw_string*                            
+[203] print.xfun_strict_list*                           
+[204] print.xgettext*                                   
+[205] print.xngettext*                                  
+[206] print.xtabs*                                      
+see &#39;?methods&#39; for accessing help and source code</code></pre>
+</section><section id="usemethod3" class="slide level2">
+<h2>総称関数3</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">print.default</code></pre></div>
+<pre><code>function (x, digits = NULL, quote = TRUE, na.print = NULL, print.gap = NULL, 
+    right = FALSE, max = NULL, useSource = TRUE, ...) 
+{
+    noOpt &lt;- missing(digits) &amp;&amp; missing(quote) &amp;&amp; missing(na.print) &amp;&amp; 
+        missing(print.gap) &amp;&amp; missing(right) &amp;&amp; missing(max) &amp;&amp; 
+        missing(useSource) &amp;&amp; missing(...)
+    .Internal(print.default(x, digits, quote, na.print, print.gap, 
+        right, max, useSource, noOpt))
+}
+&lt;bytecode: 0x7fd62c7a8328&gt;
+&lt;environment: namespace:base&gt;</code></pre>
+</section></section>
+<section><section id="operator" class="titleslide slide level1"><h1>ようやく演算子のお話</h1></section><section id="remember" class="slide level2">
+<h2>冒頭の格言を思い出す</h2>
+<p>「Rのすべての関数はオブジェクトであり、すべてのオブジェクトは関数である。」</p>
+</section><section id="imean" class="slide level2">
+<h2>つまり</h2>
+<p>演算子も関数→<code>関数名()</code> という書き方ができるはず！</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="st">`</span><span class="dt">+</span><span class="st">`</span>(<span class="dv">1</span>, <span class="dv">2</span>) <span class="co"># 1 + 1 と同じ</span></code></pre></div>
+<pre><code>[1] 3</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="st">`</span><span class="dt">&lt;-</span><span class="st">`</span>(a, <span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="dv">2</span>) <span class="co"># a &lt;- 1 + 2 と同じ</span>
+<span class="kw">print</span>(a)</code></pre></div>
+<pre><code>[1] 3</code></pre>
+<p>※これはあくまで「演算子も関数であるというのを分かりやすくしているだけなので、Rでは普通こういう書き方はしません。(Lispっぽい書き方)」</p>
+</section></section>
+<section><section class="titleslide slide level1"><h1>ここからが本題</h1></section><section id="what_happened_here2" class="slide level2">
+<h2>ここでは何が起こっているのか</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="dv">1</span></code></pre></div>
+<pre><code>[1] 2</code></pre>
+<p>言い換えると、「<code>`+`()</code> 関数が実行されるときに何が起こっているのか」</p>
+</section><section id="weneed" class="slide level2">
+<h2>これを知るために理解してきたいこと</h2>
+<ul>
+<li>実行環境</li>
+<li>C関数の探索</li>
+</ul>
+</section><section id="pryr-" class="slide level2">
+<h2>pryr パッケージ</h2>
+<p>Rの内部や挙動を知るのに便利なパッケージ</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages(&quot;pryr&quot;)</span>
+<span class="kw">library</span>(pryr)</code></pre></div>
+</section></section>
+<section><section class="titleslide slide level1"><h1>実行環境</h1></section><section class="slide level2">
+<h2>関数の構成要素</h2>
+<ul>
+<li>body: 関数内部のRコード</li>
+<li>formals: 引数の集まり</li>
+<li>environment: 環境</li>
+</ul>
+</section></section>
+<section><section id="c" class="titleslide slide level1"><h1>C関数の探索</h1></section><section id="inseide_plus" class="slide level2">
+<h2><code>`+`()</code> 関数の中身を見ると…</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="st">`</span><span class="dt">+</span><span class="st">`</span></code></pre></div>
+<pre><code>function (e1, e2)  .Primitive(&quot;+&quot;)</code></pre>
+</section><section id="primitive" class="slide level2">
+<h2><code>.Primitive()</code></h2>
+</section></section>
+<section><section id="matome" class="titleslide slide level1"><h1>まとめ</h1></section><section id="goal" class="slide level2">
+<h2>最初の目標</h2>
+<p>すごく単純なコードでも、また違って見えて面白いですね</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">result &lt;-<span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="dv">2</span>
+<span class="kw">print</span>(result)</code></pre></div>
+<pre><code>[1] 3</code></pre>
+</section><section id="operator_matome" class="slide level2">
+<h2>演算子</h2>
+<ul>
+<li>普段何気なく使ってる演算子でもちゃんと理解しようとするとけっこう大変</li>
+<li>でも(ある程度)分かっておくとパッケージ開発の時とか超便利</li>
+</ul>
+</section><section id="revealjs" class="slide level2">
+<h2>本資料について</h2>
+<ul>
+<li>revealjs パッケージで作りました。</li>
+<li>以下の URL で公開しています。 <br> <a href="https://ymattu.github.io/TokyoR76/slide.html#/" class="uri">https://ymattu.github.io/TokyoR76/slide.html#/</a></li>
+</ul>
+</section><section class="slide level2">
+<h2>参考文献</h2>
+<ul>
+<li><a href="http://rtokei.tech/r/r%E3%81%AE%E3%81%93%E3%81%A8%E3%82%92%E5%AD%A6%E3%81%B6010s3%E3%82%AF%E3%83%A9%E3%82%B9/">http://rtokei.tech/r/r%E3%81%AE%E3%81%93%E3%81%A8%E3%82%92%E5%AD%A6%E3%81%B6010s3%E3%82%AF%E3%83%A9%E3%82%B9/</a></li>
+<li><a href="https://notchained.hatenablog.com/entry/2018/11/11/162550" class="uri">https://notchained.hatenablog.com/entry/2018/11/11/162550</a></li>
+<li><a href="http://mukkujohn.hatenablog.com/entry/2016/07/13/220822" class="uri">http://mukkujohn.hatenablog.com/entry/2016/07/13/220822</a></li>
+</ul>
+</section><section id="enjoy" class="slide level2">
+<h2>Enjoy!</h2>
+</section></section>
+    </div>
+  </div>
+
+  <script src="slide_files/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="slide_files/reveal.js-3.3.0.1/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: true,
+        // Transition style
+        transition: 'convex', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+
+
+        chalkboard: {
+          theme: 'whiteboard',
+        },
+
+        keyboard: {
+          67: function() { RevealChalkboard.toggleNotesCanvas() },    // toggle notes canvas when 'c' is pressed
+          66: function() { RevealChalkboard.toggleChalkboard() }, // toggle chalkboard when 'b' is pressed
+          46: function() { RevealChalkboard.clear() },    // clear chalkboard when 'DEL' is pressed
+           8: function() { RevealChalkboard.reset() },    // reset chalkboard data on current slide when 'BACKSPACE' is pressed
+          68: function() { RevealChalkboard.download() }, // downlad recorded chalkboard drawing when 'd' is pressed
+        },
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: 'slide_files/reveal.js-3.3.0.1/plugin/chalkboard/chalkboard.js', async: true },
+        ]
+      });
+    </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>
