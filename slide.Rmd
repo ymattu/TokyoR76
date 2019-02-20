@@ -109,6 +109,7 @@ print(result)
 - 「メソッドがディスパッチされる」という言い回しをします
 - 他には `head()`, `plot()`, `summary()` など
 
+
 ## 総称関数1 {#usemethod1}
 - Rでは、関数をカッコ無しでREPLに入れるとその中身が表示される
 - なぜならば、全ての関数はオブジェクトだから
@@ -124,8 +125,16 @@ print
 methods("print")
 ```
 
-
 ## 総称関数3 {#usemethod3}
+どのメソッドがディスパッチされたかは `sloop::s3_dispatch()` でわかる
+
+```{r, s3_dispatch}
+# install.packages("sloop")
+library(sloop)
+s3_dispatch(print(result))
+```
+
+## 総称関数4 {#usemethod4}
 ```{r}
 print.default
 ```

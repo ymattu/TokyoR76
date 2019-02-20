@@ -585,7 +585,7 @@ document.getElementsByTagName('head')[0].appendChild(style);
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">print</code></pre></div>
 <pre><code>function (x, ...) 
 UseMethod(&quot;print&quot;)
-&lt;bytecode: 0x7fd62a11fe98&gt;
+&lt;bytecode: 0x7fcdd9538428&gt;
 &lt;environment: namespace:base&gt;</code></pre>
 </section><section id="usemethod2" class="slide level2">
 <h2>総称関数2</h2>
@@ -800,6 +800,15 @@ UseMethod(&quot;print&quot;)
 see &#39;?methods&#39; for accessing help and source code</code></pre>
 </section><section id="usemethod3" class="slide level2">
 <h2>総称関数3</h2>
+<p>どのメソッドがディスパッチされたかは <code>sloop::s3_dispatch()</code> でわかる</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages(&quot;sloop&quot;)</span>
+<span class="kw">library</span>(sloop)
+<span class="kw">s3_dispatch</span>(<span class="kw">print</span>(result))</code></pre></div>
+<pre><code>   print.double
+   print.numeric
+=&gt; print.default</code></pre>
+</section><section id="usemethod4" class="slide level2">
+<h2>総称関数4</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">print.default</code></pre></div>
 <pre><code>function (x, digits = NULL, quote = TRUE, na.print = NULL, print.gap = NULL, 
     right = FALSE, max = NULL, useSource = TRUE, ...) 
@@ -810,7 +819,7 @@ see &#39;?methods&#39; for accessing help and source code</code></pre>
     .Internal(print.default(x, digits, quote, na.print, print.gap, 
         right, max, useSource, noOpt))
 }
-&lt;bytecode: 0x7fd62c7a8328&gt;
+&lt;bytecode: 0x7fcdd9890ea8&gt;
 &lt;environment: namespace:base&gt;</code></pre>
 </section></section>
 <section><section id="operator" class="titleslide slide level1"><h1>ようやく演算子のお話</h1></section><section id="remember" class="slide level2">
