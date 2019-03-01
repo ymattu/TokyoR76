@@ -78,8 +78,11 @@ options(dplyr.print_max = 1e9)
 - 演算子の挙動
     - 関数の実行環境
     - 演算子の中身
-    - 演算子を定義
 - まとめ
+
+※20分しかないので簡単に。
+
+## 今日はパッケージ名だけでも<br>覚えて帰ってくださいねm(_ _)m 
 
 # 本日の目標 {#todays_goal}
 ## これを理解する {#understand_this}
@@ -91,7 +94,11 @@ print(result)
 
 とくに `result <- 1 + 1` の部分
 
-## 今日いちばん大切なこと {#most_important}
+## 前回のTokyo.Rで... {#last_tokyor}
+[宇宙が生まれる前の話](https://github.com/8-u8/TokyoR/blob/master/20190119/R%E8%A8%80%E8%AA%9E%E8%B6%85%E5%85%A5%E9%96%80_opened.pdf)
+![](img/panda.png)
+
+## 大切なこと {#most_important}
 「Rのすべての関数はオブジェクトであり、すべてのオブジェクトは関数である。」 
 
 ↓
@@ -130,8 +137,7 @@ methods("print")
 
 ```{r, s3_dispatch}
 # install.packages("sloop")
-library(sloop)
-s3_dispatch(print(result))
+sloop::s3_dispatch(print(result))
 ```
 
 ## 総称関数4 {#usemethod4}
@@ -156,40 +162,117 @@ print(a)
 ※これはあくまで「演算子も関数であるというのを分かりやすくしているだけなので、Rでは普通こういう書き方はしません。(Lispっぽい書き方)」
 
 # ここからが本題
+## pryr パッケージ {#pryr_pkg}
+```{r, pryr}
+# install.packages("pryr")
+```
+
+注）dplyrの前身のplyrというパッケージがありましたがそれとは別物です
+
+## `1 + 2` を読み解く {#oneplustwo}
+- `pryr::ast()` で構造を確認
+- どのような順序で関数が実行されているのかがわかる
+
+```{r}
+pryr::ast(1 + 2)
+```
+
+
 ## ここでは何が起こっているのか {#what_happened_here2}
 ```{r}
-1 + 1
+1 + 2
 ```
 
 言い換えると、「`` `+`() `` 関数が実行されるときに何が起こっているのか」
 
 ## これを知るために理解してきたいこと {#weneed}
 - 実行環境
-- C関数の探索
-
-## pryr パッケージ
-Rの内部や挙動を知るのに便利なパッケージ
-
-```{r, pryr}
-# install.packages("pryr")
-library(pryr)
-```
+- `` `+()` `` 関数の中身
 
 
-# 実行環境
-## 関数の構成要素
+# 実行環境 {#environment}
+## 関数の構成要素 {#factor_of_function}
 - body: 関数内部のRコード
 - formals: 引数の集まり
 - environment: 環境
 
-# C関数の探索
+```
+func_name <- (arg1, arg2, ...) {
+  do something
+}
+```
+
+## 環境とは {#whats_env}
+- Rではオブジェクト(ここでは `` `+`() `` 関数 )が呼び出されたとき、それを探しに行きます。
+1. まず身近な相手にそれを持ってるか聞く。
+2. その人が持ってなかった時、じゃあ次はこの人に聞いてね、っていうのを教えてくれる
+3. それをずーっとたどっていって最後まで誰も持ってなかったらエラー。
+
+
+###### [（Rの）環境問題について　その１。](https://qiita.com/kohske/items/325bdf48f4f4885a86f1)より
+
+## イメージは {#img_env}
+![](img/env.png)
+
+[Yet Another Introduction to tidyeval](https://speakerdeck.com/yutannihilation/yet-another-introduction-to-tidyeval?slide=19)より
+
+## 最初に聞く相手は `.GlobalEnv`
+```{r}
+ls(pos = .GlobalEnv)
+```
+
+## `rlang::env_parent()` で<br>次の相手を教えてもらう {#env_parent}
+```{r}
+rlang::env_parent(.GlobalEnv)
+```
+
+
+## `rlang::env_parents()` で<br>聞く相手の順番を教えてもらう  {#env_parents}
+
+```{r}
+rlang::env_parents(.GlobalEnv)
+```
+
+`search()` でも良い
+
+## で、 `` `+`() `` は誰が持ってるの？ {#whreplus}
+```{r}
+pryr::where("+")
+```
+
+`find()` でも良い
+
+## ここまでで分かったこと {#wefind}
+- ` 1 + 2` は `` `+`(1, 2) `` を実行した結果である。
+- `` `+`() `` 関数はbaseパッケージが (という環境) が持っていて、そこから呼び出される
+
+# `` `+()` `` 関数の中身 {#search_plus}
 ## `` `+`() `` 関数の中身を見ると... {#inseide_plus}
 ```{r, inside_plus}
 `+`
 ```
 
-## `.Primitive()`
+## `.Primitive()` {#primitive}
+- base パッケージでC言語の関数を呼び出すために使われる特殊な関数
+- `.Interenal` というのもあります。
 
+## C言語の関数の探し方 {#search_c_func}
+- Rのソースコードから探す
+    1. `src/main/names.c` からCで定義された関数を見つける
+    2. Rのソースコードを見る
+- `pryr::show_c_source()` を使うと簡単
+
+## `pryr::show_c_source()` {#show_c_source}
+```
+> pryr::show_c_source(.Primitive("+"))
++ is implemented by do_arith with op = PLUSOP
+```
+
+![](./img/show_c_source.png)
+
+# C関数の中身は... {#insideCfunc}
+- すいませんそこまで手が回りませんでした。。。
+- というかC言語にそんなに詳しくない。。。
 
 # まとめ {#matome}
 ## 最初の目標 {#goal}
@@ -199,17 +282,34 @@ result <- 1 + 2
 print(result)
 ``` 
 
+## 分かったこと {#wakattakoto}
+- `result <- 1 + 2` は `` `<- `(result,  `+`(1, 2)) `` を実行した結果である。
+- `` `+`() `` 関数はbaseパッケージが (という環境) が持って、そこから呼び出される
+- ちなみに`` `<-()` `` 関数も同じ
+- `` `+`() `` 関数は `.Primitive("+")` というRのソースコード(C言語)の中で定義された関数が呼び出されたものだった
+
 ## 演算子 {#operator_matome}
 - 普段何気なく使ってる演算子でもちゃんと理解しようとするとけっこう大変
 - でも(ある程度)分かっておくとパッケージ開発の時とか超便利
+
+## Rの内部を探る三種の神器 {#three_pkgs}
+- [rlang](https://github.com/r-lib/rlang)
+- [pryr](https://github.com/hadley/pryr)
+- [sloop](https://github.com/r-lib/sloop)
 
 ## 本資料について {#revealjs}
 - revealjs パッケージで作りました。
 - 以下の URL で公開しています。 <br> https://ymattu.github.io/TokyoR76/slide.html#/
 
-## 参考文献
+## 参考文献1 {#ref1}
+- https://qiita.com/kohske/items/325bdf48f4f4885a86f1
 - http://rtokei.tech/r/r%E3%81%AE%E3%81%93%E3%81%A8%E3%82%92%E5%AD%A6%E3%81%B6010s3%E3%82%AF%E3%83%A9%E3%82%B9/
 - https://notchained.hatenablog.com/entry/2018/11/11/162550
 - http://mukkujohn.hatenablog.com/entry/2016/07/13/220822
+
+## 参考文献2 {#ref2}
+R言語徹底解説 (原著: [Advanced R](http://adv-r.had.co.nz/))
+
+![](img/advancedR.jpg)
 
 ## Enjoy! {#enjoy}

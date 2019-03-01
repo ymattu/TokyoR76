@@ -548,10 +548,12 @@ document.getElementsByTagName('head')[0].appendChild(style);
 <ul>
 <li>関数の実行環境</li>
 <li>演算子の中身</li>
-<li>演算子を定義</li>
 </ul></li>
 <li>まとめ</li>
 </ul>
+<p>※20分しかないので簡単に。</p>
+</section><section id="-m_-_m" class="slide level2">
+<h2>今日はパッケージ名だけでも<br>覚えて帰ってくださいねm(_ _)m</h2>
 </section></section>
 <section><section id="todays_goal" class="titleslide slide level1"><h1>本日の目標</h1></section><section id="understand_this" class="slide level2">
 <h2>これを理解する</h2>
@@ -559,8 +561,11 @@ document.getElementsByTagName('head')[0].appendChild(style);
 <span class="kw">print</span>(result)</code></pre></div>
 <pre><code>[1] 3</code></pre>
 <p>とくに <code>result &lt;- 1 + 1</code> の部分</p>
+</section><section id="last_tokyor" class="slide level2">
+<h2>前回のTokyo.Rで…</h2>
+<p><a href="https://github.com/8-u8/TokyoR/blob/master/20190119/R%E8%A8%80%E8%AA%9E%E8%B6%85%E5%85%A5%E9%96%80_opened.pdf">宇宙が生まれる前の話</a> <img src="img/panda.png" /></p>
 </section><section id="most_important" class="slide level2">
-<h2>今日いちばん大切なこと</h2>
+<h2>大切なこと</h2>
 <p>「Rのすべての関数はオブジェクトであり、すべてのオブジェクトは関数である。」</p>
 <p>↓</p>
 <p>「<strong>R上での全ての挙動は関数の実行である</strong>。」</p>
@@ -585,7 +590,7 @@ document.getElementsByTagName('head')[0].appendChild(style);
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">print</code></pre></div>
 <pre><code>function (x, ...) 
 UseMethod(&quot;print&quot;)
-&lt;bytecode: 0x7fcdd9538428&gt;
+&lt;bytecode: 0x7fe8299a8050&gt;
 &lt;environment: namespace:base&gt;</code></pre>
 </section><section id="usemethod2" class="slide level2">
 <h2>総称関数2</h2>
@@ -792,18 +797,15 @@ UseMethod(&quot;print&quot;)
 [199] print.undoc*                                      
 [200] print.vignette*                                   
 [201] print.warnings                                    
-[202] print.xfun_raw_string*                            
-[203] print.xfun_strict_list*                           
-[204] print.xgettext*                                   
-[205] print.xngettext*                                  
-[206] print.xtabs*                                      
+[202] print.xgettext*                                   
+[203] print.xngettext*                                  
+[204] print.xtabs*                                      
 see &#39;?methods&#39; for accessing help and source code</code></pre>
 </section><section id="usemethod3" class="slide level2">
 <h2>総称関数3</h2>
 <p>どのメソッドがディスパッチされたかは <code>sloop::s3_dispatch()</code> でわかる</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages(&quot;sloop&quot;)</span>
-<span class="kw">library</span>(sloop)
-<span class="kw">s3_dispatch</span>(<span class="kw">print</span>(result))</code></pre></div>
+sloop<span class="op">::</span><span class="kw">s3_dispatch</span>(<span class="kw">print</span>(result))</code></pre></div>
 <pre><code>   print.double
    print.numeric
 =&gt; print.default</code></pre>
@@ -819,7 +821,7 @@ see &#39;?methods&#39; for accessing help and source code</code></pre>
     .Internal(print.default(x, digits, quote, na.print, print.gap, 
         right, max, useSource, noOpt))
 }
-&lt;bytecode: 0x7fcdd9890ea8&gt;
+&lt;bytecode: 0x7fe829078f68&gt;
 &lt;environment: namespace:base&gt;</code></pre>
 </section></section>
 <section><section id="operator" class="titleslide slide level1"><h1>ようやく演算子のお話</h1></section><section id="remember" class="slide level2">
@@ -835,49 +837,148 @@ see &#39;?methods&#39; for accessing help and source code</code></pre>
 <pre><code>[1] 3</code></pre>
 <p>※これはあくまで「演算子も関数であるというのを分かりやすくしているだけなので、Rでは普通こういう書き方はしません。(Lispっぽい書き方)」</p>
 </section></section>
-<section><section class="titleslide slide level1"><h1>ここからが本題</h1></section><section id="what_happened_here2" class="slide level2">
+<section><section class="titleslide slide level1"><h1>ここからが本題</h1></section><section id="pryr_pkg" class="slide level2">
+<h2>pryr パッケージ</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages(&quot;pryr&quot;)</span></code></pre></div>
+<p>注）dplyrの前身のplyrというパッケージがありましたがそれとは別物です</p>
+</section><section id="oneplustwo" class="slide level2">
+<h2><code>1 + 2</code> を読み解く</h2>
+<ul>
+<li><code>pryr::ast()</code> で構造を確認</li>
+<li>どのような順序で関数が実行されているのかがわかる</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pryr<span class="op">::</span><span class="kw">ast</span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="dv">2</span>)</code></pre></div>
+<pre><code>\- ()
+  \- `+
+  \-  1
+  \-  2 </code></pre>
+</section><section id="what_happened_here2" class="slide level2">
 <h2>ここでは何が起こっているのか</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="dv">1</span></code></pre></div>
-<pre><code>[1] 2</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="dv">2</span></code></pre></div>
+<pre><code>[1] 3</code></pre>
 <p>言い換えると、「<code>`+`()</code> 関数が実行されるときに何が起こっているのか」</p>
 </section><section id="weneed" class="slide level2">
 <h2>これを知るために理解してきたいこと</h2>
 <ul>
 <li>実行環境</li>
-<li>C関数の探索</li>
+<li><code>`+()`</code> 関数の中身</li>
 </ul>
-</section><section id="pryr-" class="slide level2">
-<h2>pryr パッケージ</h2>
-<p>Rの内部や挙動を知るのに便利なパッケージ</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages(&quot;pryr&quot;)</span>
-<span class="kw">library</span>(pryr)</code></pre></div>
 </section></section>
-<section><section class="titleslide slide level1"><h1>実行環境</h1></section><section class="slide level2">
+<section><section id="environment" class="titleslide slide level1"><h1>実行環境</h1></section><section id="factor_of_function" class="slide level2">
 <h2>関数の構成要素</h2>
 <ul>
 <li>body: 関数内部のRコード</li>
 <li>formals: 引数の集まり</li>
 <li>environment: 環境</li>
 </ul>
+<pre><code>func_name &lt;- (arg1, arg2, ...) {
+  do something
+}</code></pre>
+</section><section id="whats_env" class="slide level2">
+<h2>環境とは</h2>
+<ul>
+<li>Rではオブジェクト(ここでは <code>`+`()</code> 関数 )が呼び出されたとき、それを探しに行きます。</li>
+</ul>
+<ol type="1">
+<li>まず身近な相手にそれを持ってるか聞く。</li>
+<li>その人が持ってなかった時、じゃあ次はこの人に聞いてね、っていうのを教えてくれる</li>
+<li>それをずーっとたどっていって最後まで誰も持ってなかったらエラー。</li>
+</ol>
+<h6 id="r"><a href="https://qiita.com/kohske/items/325bdf48f4f4885a86f1">（Rの）環境問題について　その１。</a>より</h6>
+</section><section id="img_env" class="slide level2">
+<h2>イメージは</h2>
+<p><img src="img/env.png" /></p>
+<p><a href="https://speakerdeck.com/yutannihilation/yet-another-introduction-to-tidyeval?slide=19">Yet Another Introduction to tidyeval</a>より</p>
+</section><section id="-.globalenv" class="slide level2">
+<h2>最初に聞く相手は <code>.GlobalEnv</code></h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ls</span>(<span class="dt">pos =</span> .GlobalEnv)</code></pre></div>
+<pre><code>[1] &quot;Q&quot;        &quot;a&quot;        &quot;print.no&quot; &quot;result&quot;  </code></pre>
+</section><section id="env_parent" class="slide level2">
+<h2><code>rlang::env_parent()</code> で<br>次の相手を教えてもらう</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rlang<span class="op">::</span><span class="kw">env_parent</span>(.GlobalEnv)</code></pre></div>
+<pre><code>&lt;environment: package:stats&gt;
+attr(,&quot;name&quot;)
+[1] &quot;package:stats&quot;
+attr(,&quot;path&quot;)
+[1] &quot;/Library/Frameworks/R.framework/Versions/3.5/Resources/library/stats&quot;</code></pre>
+</section><section id="env_parents" class="slide level2">
+<h2><code>rlang::env_parents()</code> で<br>聞く相手の順番を教えてもらう</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rlang<span class="op">::</span><span class="kw">env_parents</span>(.GlobalEnv)</code></pre></div>
+<pre><code>[[1]] $ &lt;env: package:stats&gt;
+[[2]] $ &lt;env: package:graphics&gt;
+[[3]] $ &lt;env: package:grDevices&gt;
+[[4]] $ &lt;env: package:utils&gt;
+[[5]] $ &lt;env: package:datasets&gt;
+[[6]] $ &lt;env: package:methods&gt;
+[[7]] $ &lt;env: Autoloads&gt;
+[[8]] $ &lt;env: package:base&gt;
+[[9]] $ &lt;env: empty&gt;</code></pre>
+<p><code>search()</code> でも良い</p>
+</section><section id="whreplus" class="slide level2">
+<h2>で、 <code>`+`()</code> は誰が持ってるの？</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pryr<span class="op">::</span><span class="kw">where</span>(<span class="st">&quot;+&quot;</span>)</code></pre></div>
+<pre><code>&lt;environment: base&gt;</code></pre>
+<p><code>find()</code> でも良い</p>
+</section><section id="wefind" class="slide level2">
+<h2>ここまでで分かったこと</h2>
+<ul>
+<li><code>1 + 2</code> は <code>`+`(1, 2)</code> を実行した結果である。</li>
+<li><code>`+`()</code> 関数はbaseパッケージが (という環境) が持って、そこから呼び出される</li>
+</ul>
 </section></section>
-<section><section id="c" class="titleslide slide level1"><h1>C関数の探索</h1></section><section id="inseide_plus" class="slide level2">
+<section><section id="search_plus" class="titleslide slide level1"><h1><code>`+()`</code> 関数の中身</h1></section><section id="inseide_plus" class="slide level2">
 <h2><code>`+`()</code> 関数の中身を見ると…</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="st">`</span><span class="dt">+</span><span class="st">`</span></code></pre></div>
 <pre><code>function (e1, e2)  .Primitive(&quot;+&quot;)</code></pre>
 </section><section id="primitive" class="slide level2">
 <h2><code>.Primitive()</code></h2>
+<ul>
+<li>base パッケージでC言語の関数を呼び出すために使われる特殊な関数</li>
+<li><code>.Interenal</code> というのもあります。</li>
+</ul>
+</section><section id="search_c_func" class="slide level2">
+<h2>C言語の関数の探し方</h2>
+<ul>
+<li>Rのソースコードから探す
+<ol type="1">
+<li><code>src/main/names.c</code> からCで定義された関数を見つける</li>
+<li>Rのソースコードを見る</li>
+</ol></li>
+<li><code>pryr::show_c_source()</code> を使うと簡単</li>
+</ul>
+</section><section id="show_c_source" class="slide level2">
+<h2><code>pryr::show_c_source()</code></h2>
+<pre><code>&gt; pryr::show_c_source(.Primitive(&quot;+&quot;))
++ is implemented by do_arith with op = PLUSOP</code></pre>
+<p><img src="img/show_c_source.png" /></p>
 </section></section>
+<section><section id="insideCfunc" class="titleslide slide level1"><h1>C関数の中身は…</h1></section></section>
 <section><section id="matome" class="titleslide slide level1"><h1>まとめ</h1></section><section id="goal" class="slide level2">
 <h2>最初の目標</h2>
 <p>すごく単純なコードでも、また違って見えて面白いですね</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">result &lt;-<span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="dv">2</span>
 <span class="kw">print</span>(result)</code></pre></div>
 <pre><code>[1] 3</code></pre>
+</section><section id="wakattakoto" class="slide level2">
+<h2>分かったこと</h2>
+<ul>
+<li><code>result &lt;- 1 + 2</code> は <code>`&lt;- `(result,  `+`(1, 2))</code> を実行した結果である。</li>
+<li><code>`+`()</code> 関数はbaseパッケージが (という環境) が持って、そこから呼び出される</li>
+<li>ちなみに<code>`&lt;-()`</code> 関数も同じ</li>
+<li><code>`+`()</code> 関数は <code>.Primitive(&quot;+&quot;)</code> というRのソースコード(C言語)の中で定義された関数が呼び出されたものだった</li>
+</ul>
 </section><section id="operator_matome" class="slide level2">
 <h2>演算子</h2>
 <ul>
 <li>普段何気なく使ってる演算子でもちゃんと理解しようとするとけっこう大変</li>
 <li>でも(ある程度)分かっておくとパッケージ開発の時とか超便利</li>
+</ul>
+</section><section id="three_pkgs" class="slide level2">
+<h2>Rの内部を探る三種の神器</h2>
+<ul>
+<li><a href="https://github.com/r-lib/rlang">rlang</a></li>
+<li><a href="https://github.com/hadley/pryr">pryr</a></li>
+<li><a href="https://github.com/r-lib/sloop">sloop</a></li>
 </ul>
 </section><section id="revealjs" class="slide level2">
 <h2>本資料について</h2>
@@ -885,13 +986,17 @@ see &#39;?methods&#39; for accessing help and source code</code></pre>
 <li>revealjs パッケージで作りました。</li>
 <li>以下の URL で公開しています。 <br> <a href="https://ymattu.github.io/TokyoR76/slide.html#/" class="uri">https://ymattu.github.io/TokyoR76/slide.html#/</a></li>
 </ul>
-</section><section class="slide level2">
-<h2>参考文献</h2>
+</section><section id="ref1" class="slide level2">
+<h2>参考文献1</h2>
 <ul>
 <li><a href="http://rtokei.tech/r/r%E3%81%AE%E3%81%93%E3%81%A8%E3%82%92%E5%AD%A6%E3%81%B6010s3%E3%82%AF%E3%83%A9%E3%82%B9/">http://rtokei.tech/r/r%E3%81%AE%E3%81%93%E3%81%A8%E3%82%92%E5%AD%A6%E3%81%B6010s3%E3%82%AF%E3%83%A9%E3%82%B9/</a></li>
 <li><a href="https://notchained.hatenablog.com/entry/2018/11/11/162550" class="uri">https://notchained.hatenablog.com/entry/2018/11/11/162550</a></li>
 <li><a href="http://mukkujohn.hatenablog.com/entry/2016/07/13/220822" class="uri">http://mukkujohn.hatenablog.com/entry/2016/07/13/220822</a></li>
 </ul>
+</section><section id="ref2" class="slide level2">
+<h2>参考文献2</h2>
+<p>R言語徹底解説 (原著: <a href="http://adv-r.had.co.nz/">Advanced R</a>)</p>
+<p><img src="img/advancedR.jpg" /></p>
 </section><section id="enjoy" class="slide level2">
 <h2>Enjoy!</h2>
 </section></section>
