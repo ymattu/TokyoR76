@@ -1,5 +1,5 @@
 ---
-title: "演算子について"
+title: "演算子の話"
 author: "@y__mattu"
 date: "2019/3/2 Tokyo.R #76"
 output:
@@ -191,17 +191,6 @@ pryr::ast(1 + 2)
 
 
 # 実行環境 {#environment}
-## 関数の構成要素 {#factor_of_function}
-- body: 関数内部のRコード
-- formals: 引数の集まり
-- environment: 環境
-
-```
-func_name <- (arg1, arg2, ...) {
-  do something
-}
-```
-
 ## 環境とは {#whats_env}
 - Rではオブジェクト(ここでは `` `+`() `` 関数 )が呼び出されたとき、それを探しに行きます。
 1. まず身近な相手にそれを持ってるか聞く。
@@ -244,7 +233,7 @@ pryr::where("+")
 
 ## ここまでで分かったこと {#wefind}
 - ` 1 + 2` は `` `+`(1, 2) `` を実行した結果である。
-- `` `+`() `` 関数はbaseパッケージが (という環境) が持っていて、そこから呼び出される
+- `` `+`() `` 関数はbaseパッケージが持っていて、そこから呼び出される
 
 # `` `+()` `` 関数の中身 {#search_plus}
 ## `` `+`() `` 関数の中身を見ると... {#inseide_plus}
@@ -253,8 +242,28 @@ pryr::where("+")
 ```
 
 ## `.Primitive()` {#primitive}
-- base パッケージでC言語の関数を呼び出すために使われる特殊な関数
+- base パッケージの中でC言語の関数を呼び出すために使われる特殊な関数
 - `.Interenal` というのもあります。
+
+## `.Primitive()` その2 {#primitive2}
+- Rの関数は通常以下の3要素を持つ
+    - body: 関数内部のRコード
+    - formals: 引数の集まり
+    - environment: 環境
+```
+func_name <- (arg1, arg2, ...) {
+  do something
+}
+```
+
+## が、 `.Primitive()` の関数だけは例外 {#except}
+なぜならば、Rのコードが含まれないから
+```{r}
+body(`+`)
+formals(`+`)
+environment(`+`)
+```
+
 
 ## C言語の関数の探し方 {#search_c_func}
 - Rのソースコードから探す
@@ -290,7 +299,8 @@ print(result)
 
 ## 演算子 {#operator_matome}
 - 普段何気なく使ってる演算子でもちゃんと理解しようとするとけっこう大変
-- でも(ある程度)分かっておくとパッケージ開発の時とか超便利
+- でも(ある程度)分かっておくとパッケージ開発の時とか超便利 <br>
+→環境とかをちゃんと理解しておくと、パイプ演算子(`%>%`)の[ソースコード](https://github.com/tidyverse/magrittr/blob/master/R/pipe.R)が読めるようになる
 
 ## Rの内部を探る三種の神器 {#three_pkgs}
 - [rlang](https://github.com/r-lib/rlang)

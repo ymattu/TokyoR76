@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="@y__mattu" />
-  <title>演算子について</title>
+  <title>演算子の話</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -496,7 +496,7 @@ document.getElementsByTagName('head')[0].appendChild(style);
     <div class="slides">
 
 <section>
-    <h1 class="title">演算子について</h1>
+    <h1 class="title">演算子の話</h1>
     <h2 class="author"><span class="citation" data-cites="y__mattu">@y__mattu</span></h2>
     <h3 class="date">2019/3/2 Tokyo.R #76</h3>
 </section>
@@ -590,7 +590,7 @@ document.getElementsByTagName('head')[0].appendChild(style);
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">print</code></pre></div>
 <pre><code>function (x, ...) 
 UseMethod(&quot;print&quot;)
-&lt;bytecode: 0x7fe8299a8050&gt;
+&lt;bytecode: 0x7fbd1f8d1650&gt;
 &lt;environment: namespace:base&gt;</code></pre>
 </section><section id="usemethod2" class="slide level2">
 <h2>総称関数2</h2>
@@ -821,7 +821,7 @@ sloop<span class="op">::</span><span class="kw">s3_dispatch</span>(<span class="
     .Internal(print.default(x, digits, quote, na.print, print.gap, 
         right, max, useSource, noOpt))
 }
-&lt;bytecode: 0x7fe829078f68&gt;
+&lt;bytecode: 0x7fbd1c931db8&gt;
 &lt;environment: namespace:base&gt;</code></pre>
 </section></section>
 <section><section id="operator" class="titleslide slide level1"><h1>ようやく演算子のお話</h1></section><section id="remember" class="slide level2">
@@ -864,17 +864,7 @@ sloop<span class="op">::</span><span class="kw">s3_dispatch</span>(<span class="
 <li><code>`+()`</code> 関数の中身</li>
 </ul>
 </section></section>
-<section><section id="environment" class="titleslide slide level1"><h1>実行環境</h1></section><section id="factor_of_function" class="slide level2">
-<h2>関数の構成要素</h2>
-<ul>
-<li>body: 関数内部のRコード</li>
-<li>formals: 引数の集まり</li>
-<li>environment: 環境</li>
-</ul>
-<pre><code>func_name &lt;- (arg1, arg2, ...) {
-  do something
-}</code></pre>
-</section><section id="whats_env" class="slide level2">
+<section><section id="environment" class="titleslide slide level1"><h1>実行環境</h1></section><section id="whats_env" class="slide level2">
 <h2>環境とは</h2>
 <ul>
 <li>Rではオブジェクト(ここでは <code>`+`()</code> 関数 )が呼び出されたとき、それを探しに行きます。</li>
@@ -923,7 +913,7 @@ attr(,&quot;path&quot;)
 <h2>ここまでで分かったこと</h2>
 <ul>
 <li><code>1 + 2</code> は <code>`+`(1, 2)</code> を実行した結果である。</li>
-<li><code>`+`()</code> 関数はbaseパッケージが (という環境) が持って、そこから呼び出される</li>
+<li><code>`+`()</code> 関数はbaseパッケージが持っていて、そこから呼び出される</li>
 </ul>
 </section></section>
 <section><section id="search_plus" class="titleslide slide level1"><h1><code>`+()`</code> 関数の中身</h1></section><section id="inseide_plus" class="slide level2">
@@ -933,9 +923,31 @@ attr(,&quot;path&quot;)
 </section><section id="primitive" class="slide level2">
 <h2><code>.Primitive()</code></h2>
 <ul>
-<li>base パッケージでC言語の関数を呼び出すために使われる特殊な関数</li>
+<li>base パッケージの中でC言語の関数を呼び出すために使われる特殊な関数</li>
 <li><code>.Interenal</code> というのもあります。</li>
 </ul>
+</section><section id="primitive2" class="slide level2">
+<h2><code>.Primitive()</code> その2</h2>
+<ul>
+<li>Rの関数は通常以下の3要素を持つ
+<ul>
+<li>body: 関数内部のRコード</li>
+<li>formals: 引数の集まり</li>
+<li><p>environment: 環境</p>
+<pre><code>func_name &lt;- (arg1, arg2, ...) {
+  do something
+}</code></pre></li>
+</ul></li>
+</ul>
+</section><section id="except" class="slide level2">
+<h2>が、 <code>.Primitive()</code> の関数だけは例外</h2>
+<p>なぜならば、Rのコードが含まれないから</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">body</span>(<span class="st">`</span><span class="dt">+</span><span class="st">`</span>)</code></pre></div>
+<pre><code>NULL</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">formals</span>(<span class="st">`</span><span class="dt">+</span><span class="st">`</span>)</code></pre></div>
+<pre><code>NULL</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">environment</span>(<span class="st">`</span><span class="dt">+</span><span class="st">`</span>)</code></pre></div>
+<pre><code>NULL</code></pre>
 </section><section id="search_c_func" class="slide level2">
 <h2>C言語の関数の探し方</h2>
 <ul>
@@ -971,7 +983,7 @@ attr(,&quot;path&quot;)
 <h2>演算子</h2>
 <ul>
 <li>普段何気なく使ってる演算子でもちゃんと理解しようとするとけっこう大変</li>
-<li>でも(ある程度)分かっておくとパッケージ開発の時とか超便利</li>
+<li>でも(ある程度)分かっておくとパッケージ開発の時とか超便利 <br> →環境とかをちゃんと理解しておくと、パイプ演算子(<code>%&gt;%</code>)の<a href="https://github.com/tidyverse/magrittr/blob/master/R/pipe.R">ソースコード</a>が読めるようになる</li>
 </ul>
 </section><section id="three_pkgs" class="slide level2">
 <h2>Rの内部を探る三種の神器</h2>
@@ -989,6 +1001,7 @@ attr(,&quot;path&quot;)
 </section><section id="ref1" class="slide level2">
 <h2>参考文献1</h2>
 <ul>
+<li><a href="https://qiita.com/kohske/items/325bdf48f4f4885a86f1" class="uri">https://qiita.com/kohske/items/325bdf48f4f4885a86f1</a></li>
 <li><a href="http://rtokei.tech/r/r%E3%81%AE%E3%81%93%E3%81%A8%E3%82%92%E5%AD%A6%E3%81%B6010s3%E3%82%AF%E3%83%A9%E3%82%B9/">http://rtokei.tech/r/r%E3%81%AE%E3%81%93%E3%81%A8%E3%82%92%E5%AD%A6%E3%81%B6010s3%E3%82%AF%E3%83%A9%E3%82%B9/</a></li>
 <li><a href="https://notchained.hatenablog.com/entry/2018/11/11/162550" class="uri">https://notchained.hatenablog.com/entry/2018/11/11/162550</a></li>
 <li><a href="http://mukkujohn.hatenablog.com/entry/2016/07/13/220822" class="uri">http://mukkujohn.hatenablog.com/entry/2016/07/13/220822</a></li>
