@@ -590,7 +590,7 @@ document.getElementsByTagName('head')[0].appendChild(style);
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">print</code></pre></div>
 <pre><code>function (x, ...) 
 UseMethod(&quot;print&quot;)
-&lt;bytecode: 0x7fbd1f8d1650&gt;
+&lt;bytecode: 0x7f830eb6e450&gt;
 &lt;environment: namespace:base&gt;</code></pre>
 </section><section id="usemethod2" class="slide level2">
 <h2>総称関数2</h2>
@@ -821,7 +821,7 @@ sloop<span class="op">::</span><span class="kw">s3_dispatch</span>(<span class="
     .Internal(print.default(x, digits, quote, na.print, print.gap, 
         right, max, useSource, noOpt))
 }
-&lt;bytecode: 0x7fbd1c931db8&gt;
+&lt;bytecode: 0x7f830da90db8&gt;
 &lt;environment: namespace:base&gt;</code></pre>
 </section></section>
 <section><section id="operator" class="titleslide slide level1"><h1>ようやく演算子のお話</h1></section><section id="remember" class="slide level2">
@@ -963,8 +963,13 @@ attr(,&quot;path&quot;)
 <pre><code>&gt; pryr::show_c_source(.Primitive(&quot;+&quot;))
 + is implemented by do_arith with op = PLUSOP</code></pre>
 <p><img src="img/show_c_source.png" /></p>
+</section><section id="insideCfunc" class="slide level2">
+<h2>C関数の中身は…</h2>
+<ul>
+<li>すいませんそこまで手が回りませんでした。。。</li>
+<li>というかC言語にそんなに詳しくない。。。</li>
+</ul>
 </section></section>
-<section><section id="insideCfunc" class="titleslide slide level1"><h1>C関数の中身は…</h1></section></section>
 <section><section id="matome" class="titleslide slide level1"><h1>まとめ</h1></section><section id="goal" class="slide level2">
 <h2>最初の目標</h2>
 <p>すごく単純なコードでも、また違って見えて面白いですね</p>
