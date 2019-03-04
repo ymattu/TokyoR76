@@ -590,7 +590,7 @@ document.getElementsByTagName('head')[0].appendChild(style);
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">print</code></pre></div>
 <pre><code>function (x, ...) 
 UseMethod(&quot;print&quot;)
-&lt;bytecode: 0x7f830eb6e450&gt;
+&lt;bytecode: 0x7f8282742428&gt;
 &lt;environment: namespace:base&gt;</code></pre>
 </section><section id="usemethod2" class="slide level2">
 <h2>総称関数2</h2>
@@ -797,9 +797,11 @@ UseMethod(&quot;print&quot;)
 [199] print.undoc*                                      
 [200] print.vignette*                                   
 [201] print.warnings                                    
-[202] print.xgettext*                                   
-[203] print.xngettext*                                  
-[204] print.xtabs*                                      
+[202] print.xfun_raw_string*                            
+[203] print.xfun_strict_list*                           
+[204] print.xgettext*                                   
+[205] print.xngettext*                                  
+[206] print.xtabs*                                      
 see &#39;?methods&#39; for accessing help and source code</code></pre>
 </section><section id="usemethod3" class="slide level2">
 <h2>総称関数3</h2>
@@ -821,7 +823,7 @@ sloop<span class="op">::</span><span class="kw">s3_dispatch</span>(<span class="
     .Internal(print.default(x, digits, quote, na.print, print.gap, 
         right, max, useSource, noOpt))
 }
-&lt;bytecode: 0x7f830da90db8&gt;
+&lt;bytecode: 0x7f8283304e20&gt;
 &lt;environment: namespace:base&gt;</code></pre>
 </section></section>
 <section><section id="operator" class="titleslide slide level1"><h1>ようやく演算子のお話</h1></section><section id="remember" class="slide level2">
@@ -837,21 +839,23 @@ sloop<span class="op">::</span><span class="kw">s3_dispatch</span>(<span class="
 <pre><code>[1] 3</code></pre>
 <p>※これはあくまで「演算子も関数であるというのを分かりやすくしているだけなので、Rでは普通こういう書き方はしません。(Lispっぽい書き方)」</p>
 </section></section>
-<section><section class="titleslide slide level1"><h1>ここからが本題</h1></section><section id="pryr_pkg" class="slide level2">
-<h2>pryr パッケージ</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages(&quot;pryr&quot;)</span></code></pre></div>
+<section><section class="titleslide slide level1"><h1>ここからが本題</h1></section><section id="todays_pkg" class="slide level2">
+<h2>今日使うパッケージ</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;pryr&quot;</span>)
+<span class="kw">install.packages</span>(<span class="st">&quot;lobstr&quot;</span>)
+<span class="kw">install.packages</span>(<span class="st">&quot;sloop&quot;</span>)
+<span class="kw">install.packages</span>(<span class="st">&quot;rlang&quot;</span>)</code></pre></div>
 <p>注）dplyrの前身のplyrというパッケージがありましたがそれとは別物です</p>
 </section><section id="oneplustwo" class="slide level2">
 <h2><code>1 + 2</code> を読み解く</h2>
 <ul>
-<li><code>pryr::ast()</code> で構造を確認</li>
+<li><code>lobstr::ast()</code> で構造を確認</li>
 <li>どのような順序で関数が実行されているのかがわかる</li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pryr<span class="op">::</span><span class="kw">ast</span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="dv">2</span>)</code></pre></div>
-<pre><code>\- ()
-  \- `+
-  \-  1
-  \-  2 </code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lobstr<span class="op">::</span><span class="kw">ast</span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="dv">2</span>)</code></pre></div>
+<pre><code>█─`+` 
+├─1 
+└─2 </code></pre>
 </section><section id="what_happened_here2" class="slide level2">
 <h2>ここでは何が起こっているのか</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="dv">2</span></code></pre></div>

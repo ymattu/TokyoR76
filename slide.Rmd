@@ -162,19 +162,22 @@ print(a)
 ※これはあくまで「演算子も関数であるというのを分かりやすくしているだけなので、Rでは普通こういう書き方はしません。(Lispっぽい書き方)」
 
 # ここからが本題
-## pryr パッケージ {#pryr_pkg}
-```{r, pryr}
-# install.packages("pryr")
+## 今日使うパッケージ {#todays_pkg}
+```{r, pkg, eval=FALSE}
+install.packages("pryr")
+install.packages("lobstr")
+install.packages("sloop")
+install.packages("rlang")
 ```
 
 注）dplyrの前身のplyrというパッケージがありましたがそれとは別物です
 
 ## `1 + 2` を読み解く {#oneplustwo}
-- `pryr::ast()` で構造を確認
+- `lobstr::ast()` で構造を確認
 - どのような順序で関数が実行されているのかがわかる
 
 ```{r}
-pryr::ast(1 + 2)
+lobstr::ast(1 + 2)
 ```
 
 
