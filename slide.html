@@ -590,7 +590,7 @@ document.getElementsByTagName('head')[0].appendChild(style);
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">print</code></pre></div>
 <pre><code>function (x, ...) 
 UseMethod(&quot;print&quot;)
-&lt;bytecode: 0x7f8282742428&gt;
+&lt;bytecode: 0x7f9d26f70a28&gt;
 &lt;environment: namespace:base&gt;</code></pre>
 </section><section id="usemethod2" class="slide level2">
 <h2>総称関数2</h2>
@@ -823,7 +823,7 @@ sloop<span class="op">::</span><span class="kw">s3_dispatch</span>(<span class="
     .Internal(print.default(x, digits, quote, na.print, print.gap, 
         right, max, useSource, noOpt))
 }
-&lt;bytecode: 0x7f8283304e20&gt;
+&lt;bytecode: 0x7f9d28d23a20&gt;
 &lt;environment: namespace:base&gt;</code></pre>
 </section></section>
 <section><section id="operator" class="titleslide slide level1"><h1>ようやく演算子のお話</h1></section><section id="remember" class="slide level2">
@@ -849,7 +849,7 @@ sloop<span class="op">::</span><span class="kw">s3_dispatch</span>(<span class="
 </section><section id="oneplustwo" class="slide level2">
 <h2><code>1 + 2</code> を読み解く</h2>
 <ul>
-<li><code>lobstr::ast()</code> で構造を確認</li>
+<li><code>lobstr::ast()</code> または <code>pryr::ast()</code> で構造を確認</li>
 <li>どのような順序で関数が実行されているのかがわかる</li>
 </ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lobstr<span class="op">::</span><span class="kw">ast</span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="dv">2</span>)</code></pre></div>

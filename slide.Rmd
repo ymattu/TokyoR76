@@ -173,7 +173,7 @@ install.packages("rlang")
 注）dplyrの前身のplyrというパッケージがありましたがそれとは別物です
 
 ## `1 + 2` を読み解く {#oneplustwo}
-- `lobstr::ast()` で構造を確認
+- `lobstr::ast()` または `pryr::ast()` で構造を確認
 - どのような順序で関数が実行されているのかがわかる
 
 ```{r}
